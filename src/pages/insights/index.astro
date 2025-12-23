@@ -1,0 +1,154 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+---
+
+<Layout title="Insights - CIVIQ Design" description="Thoughts on service design, digital government, and building better public services">
+  <Navigation />
+
+  <main class="pt-16">
+    <!-- Header -->
+    <section class="py-20 sm:py-24" style="background-color: var(--color-rice-white);">
+      <div class="content-max mx-auto px-6 sm:px-8 lg:px-12">
+        <div style="max-width: 640px;">
+          <h1 class="text-h1 mb-6 headline-balance" style="color: var(--color-forest-green);">Insights</h1>
+          <p class="text-intro" style="color: var(--color-forest-green); opacity: 0.75;">
+            Thoughts on service design, digital government, and building better public services.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Posts -->
+    <section class="py-16 sm:py-20" style="background-color: var(--color-white);">
+      <div class="content-max mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="insights-grid">
+          {posts.map((post) => (
+            <a href={`/insights/${post.slug}`} class="insight-card group">
+              <article>
+                <div class="card-content">
+                  <div class="text-small flex items-center gap-3 mb-4" style="color: var(--color-forest-green); opacity: 0.5;">
+                    <time datetime={post.data.publishDate.toISOString()}>
+                      {post.data.publishDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </time>
+                    <span>•</span>
+                    <span>{post.data.readTime}</span>
+                  </div>
+
+                  <h2 class="text-h3 mb-3 post-title transition-colors duration-200" style="color: var(--color-forest-green);">
+                    {post.data.title}
+                  </h2>
+
+                  <p class="text-body mb-4" style="color: var(--color-forest-green); opacity: 0.75;">
+                    {post.data.excerpt}
+                  </p>
+
+                  <div class="flex items-center gap-2 flex-wrap mb-5">
+                    {post.data.tags.map((tag) => (
+                      <span class="post-tag">{tag}</span>
+                    ))}
+                  </div>
+
+                  <div class="card-cta">
+                    <span>Read article</span>
+                    <svg class="arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </article>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .insights-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .insights-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  .insight-card {
+    display: block;
+    background: var(--color-white);
+    border: 1px solid var(--color-grey-d);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.3s ease;
+  }
+
+  .insight-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(18, 64, 69, 0.15);
+    box-shadow:
+      0 4px 12px rgba(18, 64, 69, 0.08),
+      0 12px 32px rgba(18, 64, 69, 0.1);
+  }
+
+  .insight-card:hover .post-title {
+    color: var(--color-teal-blue);
+  }
+
+  .card-content {
+    padding: 1.75rem 2rem 2rem;
+  }
+
+  .post-tag {
+    font-family: var(--font-primary);
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-forest-green);
+    background-color: rgba(217, 237, 181, 0.4);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-warm-clay);
+    transition: gap 0.25s ease;
+  }
+
+  .insight-card:hover .card-cta {
+    gap: 0.75rem;
+  }
+
+  .card-cta .arrow {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .insight-card:hover .card-cta .arrow {
+    transform: translateX(2px);
+  }
+</style>

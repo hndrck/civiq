@@ -1,0 +1,105 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md" style="background-color: rgba(255, 255, 255, 0.8); border-bottom: 1px solid var(--color-grey-d);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <a href="/" class="flex items-center space-x-2 group">
+        <img src="/civiq-design-logo-full-color-rgb.svg" alt="CIVIQ Design" class="h-8 transition-transform group-hover:scale-105" />
+      </a>
+
+      <div class="hidden md:flex items-center space-x-8">
+        <a
+          href="/case-studies"
+          class={`nav-link text-sm font-medium transition-opacity ${currentPath.includes('/case-studies') ? 'nav-link-active' : ''}`}
+          style={`color: ${currentPath.includes('/case-studies') ? 'var(--color-teal-blue)' : 'var(--color-forest-green)'}; letter-spacing: var(--tracking-normal);`}
+        >
+          Case Studies
+        </a>
+        <a
+          href="/insights"
+          class={`nav-link text-sm font-medium transition-opacity ${currentPath.includes('/insights') ? 'nav-link-active' : ''}`}
+          style={`color: ${currentPath.includes('/insights') ? 'var(--color-teal-blue)' : 'var(--color-forest-green)'}; letter-spacing: var(--tracking-normal);`}
+        >
+          Insights
+        </a>
+        <a
+          href="/contact"
+          class="nav-cta inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all"
+          style="background-color: var(--color-warm-clay); color: var(--color-white); letter-spacing: var(--tracking-normal);"
+        >
+          Let's Talk
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <button
+        id="mobile-menu-button"
+        class="md:hidden p-2 rounded-lg transition-colors mobile-menu-btn"
+        style="color: var(--color-forest-green);"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white" style="border-top: 1px solid var(--color-grey-d);">
+    <div class="px-4 py-3 space-y-3">
+      <a href="/case-studies" class="mobile-nav-link block text-sm font-medium transition-opacity" style="color: var(--color-forest-green); letter-spacing: var(--tracking-normal);">Case Studies</a>
+      <a href="/insights" class="mobile-nav-link block text-sm font-medium transition-opacity" style="color: var(--color-forest-green); letter-spacing: var(--tracking-normal);">Insights</a>
+      <a href="/contact" class="mobile-nav-cta block text-sm font-medium transition-colors" style="color: var(--color-warm-clay); letter-spacing: var(--tracking-normal);">Let's Talk</a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  mobileMenuButton?.addEventListener('click', () => {
+    const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+    mobileMenuButton.setAttribute('aria-expanded', (!isExpanded).toString());
+    mobileMenu?.classList.toggle('hidden');
+  });
+</script>
+
+<style>
+  .mobile-menu-btn:hover {
+    background-color: var(--color-grey-e);
+  }
+
+  /* Nav link hover states */
+  .nav-link {
+    opacity: 0.75;
+  }
+  .nav-link:hover {
+    opacity: 1;
+  }
+  .nav-link-active {
+    opacity: 1;
+  }
+
+  /* CTA button hover */
+  .nav-cta:hover {
+    background-color: #C4624A !important;
+    transform: translateY(-1px);
+  }
+
+  /* Mobile nav links */
+  .mobile-nav-link {
+    opacity: 0.85;
+  }
+  .mobile-nav-link:hover {
+    opacity: 1;
+  }
+  .mobile-nav-cta:hover {
+    color: #C4624A !important;
+  }
+</style>

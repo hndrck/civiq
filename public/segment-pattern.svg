@@ -1,0 +1,23 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Segment curves pattern - subtle, organic shapes -->
+  <g opacity="0.15">
+    <!-- Large curved segment -->
+    <path d="M 0 400 Q 200 200, 400 200 T 800 400" stroke="currentColor" stroke-width="2" fill="none"/>
+
+    <!-- Medium curved segment -->
+    <path d="M 100 600 Q 300 450, 500 450 T 900 600" stroke="currentColor" stroke-width="1.5" fill="none"/>
+
+    <!-- Small curved segment -->
+    <path d="M -100 200 Q 50 100, 200 100 T 500 200" stroke="currentColor" stroke-width="1" fill="none"/>
+
+    <!-- Connecting arc -->
+    <path d="M 600 100 Q 700 250, 700 400 T 600 700" stroke="currentColor" stroke-width="1.5" fill="none"/>
+
+    <!-- Circular segment -->
+    <circle cx="200" cy="600" r="80" stroke="currentColor" stroke-width="1" fill="none"/>
+
+    <!-- Additional flowing curves -->
+    <path d="M 400 0 Q 350 150, 400 300 T 400 600" stroke="currentColor" stroke-width="1" fill="none"/>
+    <path d="M 0 100 Q 150 150, 300 100 T 600 100" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  </g>
+</svg>

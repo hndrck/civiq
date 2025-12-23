@@ -1,0 +1,77 @@
+---
+interface Props {
+  client: string;
+  project_type: string;
+  role: string;
+  services: string[];
+}
+
+const { client, project_type, role, services } = Astro.props;
+---
+
+<aside class="case-study-sidebar lg:sticky lg:top-24 h-fit">
+  <div class="bg-white rounded-lg p-6 sm:p-8" style="border: 1px solid var(--color-grey-d);">
+    <div class="space-y-6">
+      <!-- Client -->
+      <div>
+        <h3 class="text-xs font-medium mb-2 uppercase tracking-wider" style="color: var(--color-forest-green); opacity: 0.6; letter-spacing: 0.1em;">
+          Client
+        </h3>
+        <p class="text-base" style="color: var(--color-forest-green); font-weight: var(--font-weight-medium);">
+          {client}
+        </p>
+      </div>
+
+      <div style="height: 1px; background: var(--color-grey-d);"></div>
+
+      <!-- Project Type -->
+      <div>
+        <h3 class="text-xs font-medium mb-2 uppercase tracking-wider" style="color: var(--color-forest-green); opacity: 0.6; letter-spacing: 0.1em;">
+          Project Type
+        </h3>
+        <p class="text-base" style="color: var(--color-forest-green); font-weight: var(--font-weight-medium);">
+          {project_type}
+        </p>
+      </div>
+
+      <div style="height: 1px; background: var(--color-grey-d);"></div>
+
+      <!-- My Role -->
+      <div>
+        <h3 class="text-xs font-medium mb-2 uppercase tracking-wider" style="color: var(--color-forest-green); opacity: 0.6; letter-spacing: 0.1em;">
+          My Role
+        </h3>
+        <p class="text-base" style="color: var(--color-forest-green); font-weight: var(--font-weight-medium);">
+          {role}
+        </p>
+      </div>
+
+      <div style="height: 1px; background: var(--color-grey-d);"></div>
+
+      <!-- Services -->
+      <div>
+        <h3 class="text-xs font-medium mb-3 uppercase tracking-wider" style="color: var(--color-forest-green); opacity: 0.6; letter-spacing: 0.1em;">
+          Services
+        </h3>
+        <ul class="space-y-2">
+          {services.map(service => (
+            <li class="flex items-start gap-2">
+              <span style="color: var(--color-warm-clay); margin-top: 0.35rem;">•</span>
+              <span class="text-sm" style="color: var(--color-forest-green); line-height: 1.6;">
+                {service}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<style>
+  @media (max-width: 1023px) {
+    .case-study-sidebar {
+      position: static !important;
+    }
+  }
+</style>

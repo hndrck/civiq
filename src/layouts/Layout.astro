@@ -1,0 +1,156 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  jsonLd?: object;
+}
+
+const { title, description = 'Service Design for Mission-Driven Organizations', image = '/og-image.png', jsonLd } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = new URL(image, Astro.site);
+const siteURL = Astro.site?.toString() || 'https://civiq.design';
+
+// Base Organization schema
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Civiq Design",
+  "url": siteURL,
+  "logo": `${siteURL}/civiq-design-logo-full-color-rgb.svg`,
+  "description": "Service Design for Mission-Driven Organizations",
+  "founder": {
+    "@type": "Person",
+    "name": "Brian Hendrick",
+    "jobTitle": "Founder",
+    "url": "https://www.linkedin.com/in/brianhendrick/"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/in/brianhendrick/"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Business Inquiries",
+    "email": "info@civiq.design"
+  }
+};
+
+// WebSite schema for search
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Civiq Design",
+  "url": siteURL,
+  "description": "Service Design for Mission-Driven Organizations"
+};
+
+// Professional Service schema
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Civiq Design",
+  "description": "Senior government service design expertise. Helping governments ship services that work.",
+  "url": siteURL,
+  "priceRange": "$$$$",
+  "areaServed": ["Canada", "United States"],
+  "serviceType": ["Service Design", "Digital Strategy", "User Research", "Capability Building"]
+};
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Civiq Design" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL} />
+
+    <!-- Fonts: Figtree only (per brand guidelines) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Critical inline styles for above-fold content -->
+    <style>
+      /* Prevent flash of unstyled content */
+      .hero-animate { opacity: 0; transform: translateY(20px); }
+    </style>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class="antialiased" style="background-color: var(--color-white); color: var(--color-forest-green);">
+    <slot />
+
+    <!-- Animation Scripts -->
+    <script>
+      // Hero entrance animation - runs on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        // Respect reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (prefersReducedMotion) {
+          // Immediately show all animated elements
+          document.querySelectorAll('.hero-animate, .animate-fade-in-up').forEach(el => {
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+          });
+          return;
+        }
+
+        // Hero entrance animation with stagger
+        requestAnimationFrame(() => {
+          document.querySelectorAll('.hero-animate').forEach(el => {
+            el.classList.add('is-loaded');
+          });
+        });
+
+        // Scroll-triggered animations using Intersection Observer
+        const observerOptions = {
+          root: null,
+          rootMargin: '0px 0px -60px 0px',
+          threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        // Observe all elements with scroll animation class
+        document.querySelectorAll('.animate-fade-in-up').forEach(el => {
+          observer.observe(el);
+        });
+      });
+    </script>
+  </body>
+</html>

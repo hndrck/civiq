@@ -1,0 +1,191 @@
+---
+import Layout from './Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import CaseStudyHero from '../components/case-studies/CaseStudyHero.astro';
+import CaseStudySidebar from '../components/case-studies/CaseStudySidebar.astro';
+import CaseStudyCTA from '../components/case-studies/CaseStudyCTA.astro';
+import CaseStudyNav from '../components/case-studies/CaseStudyNav.astro';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    client: string;
+    project_type: string;
+    role: string;
+    services: string[];
+    summary: string;
+    impact: string;
+  };
+  slug: string;
+  nextCaseStudy?: {
+    slug: string;
+    title: string;
+    client: string;
+  };
+}
+
+const { frontmatter, slug, nextCaseStudy } = Astro.props;
+
+// Get canonical URL for this case study
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteURL = Astro.site?.toString() || 'https://civiq.design';
+
+// Case Study schema for SEO (using CreativeWork type)
+const caseStudySchema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": frontmatter.title,
+  "description": frontmatter.summary,
+  "creator": {
+    "@type": "Organization",
+    "name": "Civiq Design",
+    "url": siteURL
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": frontmatter.client
+  },
+  "about": frontmatter.services.join(", "),
+  "url": canonicalURL.toString(),
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": canonicalURL.toString()
+  }
+};
+---
+
+<Layout title={`${frontmatter.title} — Civiq Design`} description={frontmatter.summary} jsonLd={caseStudySchema}>
+  <Navigation />
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <CaseStudyHero
+    client={frontmatter.client}
+    title={frontmatter.title}
+    slug={slug}
+    summary={frontmatter.summary}
+    services={frontmatter.services}
+    impact={frontmatter.impact}
+  />
+
+  <main id="main-content" class="py-16 sm:py-20 lg:py-24" style="background-color: var(--color-white);">
+    <div class="content-max mx-auto px-6 sm:px-8 lg:px-12">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        <!-- Sidebar (appears first on mobile, right on desktop) -->
+        <div class="lg:col-span-4 lg:order-2">
+          <CaseStudySidebar
+            client={frontmatter.client}
+            project_type={frontmatter.project_type}
+            role={frontmatter.role}
+            services={frontmatter.services}
+          />
+        </div>
+
+        <!-- Article content (appears second on mobile, left on desktop) -->
+        <article class="lg:col-span-8 lg:order-1 prose prose-lg max-w-none">
+          <slot />
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <CaseStudyCTA />
+
+  <CaseStudyNav nextCaseStudy={nextCaseStudy} />
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Prose styling for markdown content */
+  .prose {
+    color: var(--color-forest-green);
+  }
+
+  .prose h2 {
+    font-family: var(--font-primary);
+    font-size: var(--text-h2);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-forest-green);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+
+  .prose p {
+    font-family: var(--font-primary);
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: var(--color-forest-green);
+    opacity: 0.85;
+  }
+
+  .prose strong {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-forest-green);
+    opacity: 1;
+  }
+
+  .prose ul, .prose ol {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose li {
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+  }
+
+  .prose li > strong {
+    color: var(--color-forest-green);
+  }
+
+  .prose a {
+    color: var(--color-warm-clay);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .prose a:hover {
+    color: #C4624A;
+    text-decoration: underline;
+  }
+
+  .prose img {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(18, 64, 69, 0.08);
+  }
+
+  .prose img + em {
+    display: block;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-forest-green);
+    opacity: 0.6;
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 1023px) {
+    .prose h2 {
+      font-size: 1.5rem;
+    }
+
+    .prose p {
+      font-size: 1rem;
+    }
+  }
+</style>

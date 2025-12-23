@@ -1,0 +1,64 @@
+---
+interface Props {
+  prevPost?: {
+    slug: string;
+    title: string;
+  };
+  nextPost?: {
+    slug: string;
+    title: string;
+  };
+}
+
+const { prevPost, nextPost } = Astro.props;
+---
+
+{(prevPost || nextPost) && (
+  <section class="py-12 sm:py-16" style="background-color: var(--color-rice-white); border-top: 1px solid var(--color-grey-d);">
+    <div class="mx-auto px-6 sm:px-8 lg:px-12" style="max-width: 680px;">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <!-- Previous Post -->
+        {prevPost ? (
+          <a
+            href={`/insights/${prevPost.slug}`}
+            class="group block text-left"
+          >
+            <div class="text-xs font-medium mb-2 uppercase tracking-wider transition-opacity duration-200" style="color: var(--color-forest-green); opacity: 0.5;">
+              ← Previous
+            </div>
+            <h3 class="text-base sm:text-lg transition-colors duration-200" style="color: var(--color-forest-green); font-weight: var(--font-weight-medium); line-height: 1.4;">
+              {prevPost.title}
+            </h3>
+          </a>
+        ) : (
+          <div></div>
+        )}
+
+        <!-- Next Post -->
+        {nextPost && (
+          <a
+            href={`/insights/${nextPost.slug}`}
+            class="group block text-right"
+          >
+            <div class="text-xs font-medium mb-2 uppercase tracking-wider transition-opacity duration-200" style="color: var(--color-forest-green); opacity: 0.5;">
+              Next →
+            </div>
+            <h3 class="text-base sm:text-lg transition-colors duration-200" style="color: var(--color-forest-green); font-weight: var(--font-weight-medium); line-height: 1.4;">
+              {nextPost.title}
+            </h3>
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  a.group:hover h3 {
+    color: var(--color-teal-blue);
+  }
+
+  a.group:hover div {
+    opacity: 1;
+  }
+</style>

@@ -1,0 +1,99 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import CaseStudyCard from '../../components/case-studies/CaseStudyCard.astro';
+import { getCollection } from 'astro:content';
+
+const caseStudies = (await getCollection('case-studies'))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title="Case Studies - CIVIQ Design" description="Explore our work delivering impact for government and mission-driven organizations">
+  <Navigation />
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <main id="main-content" class="pt-16">
+    <!-- Header -->
+    <section class="hero-animate hero-animate-delay-1" style="background-color: var(--color-rice-white); padding-top: 120px; padding-bottom: 100px;">
+      <div class="content-max mx-auto px-6 sm:px-8 lg:px-12">
+        <div style="max-width: 640px;">
+          <h1 class="text-h1 mb-6 headline-balance" style="color: var(--color-forest-green);">Case Studies</h1>
+          <p class="text-intro" style="color: var(--color-forest-green); opacity: 0.75;">
+            Real projects delivering measurable impact across government and nonprofit.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case Studies Grid -->
+    <section class="section-padding" style="background-color: var(--color-white);">
+      <div class="content-max mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="case-studies-list">
+          {caseStudies.map((study, index) => (
+            <CaseStudyCard
+              title={study.data.title}
+              client={study.data.client}
+              slug={study.slug}
+              summary={study.data.summary}
+              services={study.data.services}
+              featured={study.data.featured}
+              index={index}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="animate-fade-in-up" style="background-color: var(--color-rice-white); padding-top: 120px; padding-bottom: 120px;">
+      <div class="content-max mx-auto px-6 sm:px-8 lg:px-12">
+        <div style="max-width: 640px;">
+          <h2 class="text-h2 mb-6 headline-balance" style="color: var(--color-forest-green);">
+            Have a challenge in mind?
+          </h2>
+          <p class="text-intro mb-10" style="color: var(--color-forest-green); opacity: 0.75;">
+            I take on a limited number of projects each year. If you're facing a complex service challenge, let's see if there's a fit.
+          </p>
+          <a
+            href="/contact"
+            class="group inline-flex items-center gap-3 text-body transition-all duration-200"
+            style="color: var(--color-warm-clay); font-weight: var(--font-weight-medium);"
+          >
+            <span>Get in Touch</span>
+            <span class="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .case-studies-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .case-studies-list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .case-studies-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Hover color transition for CTA link */
+  a[href="/contact"]:hover {
+    color: #C4624A;
+  }
+</style>
